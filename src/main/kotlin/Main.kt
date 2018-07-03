@@ -2,6 +2,7 @@
 import net.lingala.zip4j.core.ZipFile
 import net.lingala.zip4j.model.ZipParameters
 import java.io.File
+import java.time.Instant
 
 // this will have to do until i figure out the github api
 val mods = listOf(
@@ -25,7 +26,11 @@ fun main(args: Array<String>) {
         compiledModsFolder.mkdir()
     }
 
+    val initialTime = Instant.now().epochSecond
+
     for (i in mods.indices) {
+        val time1 = Instant.now().epochSecond
+
         val mod = mods[i]
         val folder = File(mod.name)
         val isNewMod = !folder.exists()
@@ -71,8 +76,10 @@ fun main(args: Array<String>) {
             println("Could not generate mod file: $t")
             println("Skipping: ${mod.name}")
         }
+        println("Time elapsed: ${Instant.now().epochSecond - time1} seconds.")
         println()
     }
+    println("Total time elapsed: ${Instant.now().epochSecond - initialTime} seconds.")
 }
 
 data class Mod(val name: String, val gitUrl: String)
