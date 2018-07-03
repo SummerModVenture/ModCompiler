@@ -36,15 +36,13 @@ fun main(args: Array<String>) {
             println("Found git repository for ${mod.name}, pulling latest version.")
             gitProcess.directory(folder).command("git", "pull").start().waitFor()
         } else {
-            println("New mod, cloning from GitHub.")
+            println("New mod, cloning into ${folder.absolutePath}.")
             gitProcess.command("git", "clone", mod.gitUrl, "--recursive").start().waitFor()
         }
 
-        if (args.isNotEmpty() && args[0] == "rebuild") {
-            val buildFolder = File("${mod.name}/build/libs/")
-            if (buildFolder.exists())
-                buildFolder.deleteRecursively()
-        }
+        val buildFolder = File("${mod.name}/build/libs/")
+        if (buildFolder.exists())
+            buildFolder.deleteRecursively()
 
         println("Compiling ${mod.name}")
         try {
